@@ -1,0 +1,7 @@
+## Interface: 80300
+## Title: Improved LFG Search
+## Author: Furiedsteel
+## Version: 0.1
+
+ImprovedLFGSearch.xml
+ImprovedLFGSearch.lua
