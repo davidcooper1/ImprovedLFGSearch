@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\UI.xsd">
-    <Frame name="ImprovedLFGSearchPanel" hidden="true" frameStrata="PARENT" parent="LFGListFrame">
+    <Frame name="ImprovedLFGSearchPanel_Options" hidden="true" frameStrata="PARENT" parent="LFGListFrame">
         <Size>
             <AbsDimension x="200" y="200"></AbsDimension>
         </Size>
@@ -19,5 +19,46 @@
                 <AbsValue val="32"/>
             </EdgeSize>
         </Backdrop>
+        <Layers>
+            <Layer>
+                <FontString inherits="GameFontNormalLarge" justifyH="CENTER" parentKey="Title" text="Search Options">
+                    <Anchors>
+                        <Anchor point="TOP" y="-10"></Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="EnhancedSearch" inherits="LFGListOptionCheckButtonTemplate">
+                <KeyValues>
+                    <KeyValue key="label" value="Enhanced Search" type="string"/>
+                    <KeyValue key="tooltip" value="Filter delisted options to the bottom." type="string"/>
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" x="15"></Anchor>
+                    <Anchor point="TOP" relativeKey="$parent.Title" y="-20"></Anchor>
+                </Anchors>
+            </Frame>
+            <Frame parentKey="LiveSorting" inherits="LFGListOptionCheckButtonTemplate">
+                <KeyValues>
+                    <KeyValue key="label" value="Live Sorting" type="string"/>
+                    <KeyValue key="tooltip" value="Sorts results when listings are updated." type="string"/>
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" x="15"></Anchor>
+                    <Anchor point="TOP" relativeKey="$parent.EnhancedSearch" y="-20"></Anchor>
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnShow>
+                if (ImprovedLFGSearch_UseEnhancedSearch ~= nil) then
+                    self.EnhancedSearch.CheckButton:SetChecked(ImprovedLFGSearch_UseEnhancedSearch);
+                end
+                if (ImprovedLFGSearch_UseLiveSorting ~= nil) then
+                    self.LiveSorting.CheckButton:SetChecked(ImprovedLFGSearch_UseLiveSorting);
+                end
+            </OnShow>
+        </Scripts>
     </Frame>
 </Ui>

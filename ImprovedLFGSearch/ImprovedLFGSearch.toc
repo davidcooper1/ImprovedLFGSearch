@@ -2,6 +2,7 @@
 ## Title: Improved LFG Search
 ## Author: Furiedsteel
 ## Version: 0.1
+## SavedVariables: ImprovedLFGSearch_UseEnhancedSearch, ImprovedLFGSeach_UseLiveSorting
 
 ImprovedLFGSearch.xml
 ImprovedLFGSearch.lua

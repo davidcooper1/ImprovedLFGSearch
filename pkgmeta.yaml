@@ -1,0 +1,18 @@
+package-as: ImprovedLFGSearch
+
+move-folders:
+  ImprovedLFGSearch/ImprovedLFGSearch: ImprovedLFGSearch
+
+ignore:
+  - node_modules
+  - gulpfile.js
+  - LICENSE
+  - localdeploy.ps1
+  - package-lock.json
+  - package.json
+  - gulpfile.js
+  - README.md
+  - UI.xsd
+  - Images
+
+manual-changelog: CHANGELOG.txt

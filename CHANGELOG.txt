@@ -1,0 +1,9 @@
+Changes:
+
+v0.1.0:
+    Initial Release
+
+    Features:
+        - Enhanced Search
+        - Live Sorting
+        - Toggles for Enhanced Search and Live Sorting
