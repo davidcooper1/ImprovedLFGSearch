@@ -1,5 +1,8 @@
 Changes:
 
+v0.1.2:
+    Removed debugging code that made it into last release.
+
 v0.1.1:
     Minor Bug Fixes
 
