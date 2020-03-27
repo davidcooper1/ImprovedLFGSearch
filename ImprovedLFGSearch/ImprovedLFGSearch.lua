@@ -50,7 +50,6 @@ function NewLFGListUtil_SortSearchResultsCB(searchResultID1, searchResultID2)
 end
 
 local function SetInputStates(state)
-    print(tostring(state));
     if (state) then
         ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Enable();
         ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Enable();
