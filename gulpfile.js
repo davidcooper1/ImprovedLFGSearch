@@ -12,6 +12,7 @@ function deploy() {
 }
 gulp.task("deploy", function(cb) {
     deploy();
+    cb();
 });
 
 gulp.task("deploy-watch", function() {

@@ -49,6 +49,17 @@ function NewLFGListUtil_SortSearchResultsCB(searchResultID1, searchResultID2)
 	return searchResultID1 < searchResultID2;
 end
 
+local function SetInputStates(state)
+    print(tostring(state));
+    if (state) then
+        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Enable();
+        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Enable();
+    else
+        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Disable();
+        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Disable();
+    end
+end
+
 function LFGListUtil_SortSearchResults(results)
     if (ImprovedLFGSearch_UseEnhancedSearch) then
         table.sort(results, NewLFGListUtil_SortSearchResultsCB);
@@ -58,8 +69,7 @@ function LFGListUtil_SortSearchResults(results)
 end
 
 function LFGListSearchPanel_DoSearch(self) 
-    ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Disable();
-    ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Disable();
+    SetInputStates(false);
     OldLFGListSearchPanel_DoSearch(self);
 end
 
@@ -118,11 +128,12 @@ end);
 local OldLFGListSearchPanel_OnEvent = LFGListFrame.SearchPanel:GetScript("OnEvent");
 LFGListFrame.SearchPanel:SetScript("OnEvent", function(self, event, ...) 
     if (event == "LFG_LIST_SEARCH_RESULTS_RECEIVED") then
-        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Enable();
-        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Enable();
+        SetInputStates(true);
     elseif (event == "LFG_LIST_SEARCH_RESULT_UPDATED" and ImprovedLFGSearch_UseLiveSorting) then
         LFGListSearchPanel_UpdateResultList(self);
         LFGListSearchPanel_UpdateResults(self);
+    elseif (event == "LFG_LIST_SEARCH_FAILED") then
+        SetInputStates(true);
     end
     -- Pass through to the old event handler.
     OldLFGListSearchPanel_OnEvent(self, event, ...);
