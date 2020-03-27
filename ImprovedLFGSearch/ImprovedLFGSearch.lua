@@ -21,9 +21,9 @@ function NewLFGListUtil_SortSearchResultsCB(searchResultID1, searchResultID2)
 	local hasRemainingRole1 = HasRemainingSlotsForLocalPlayerRole(searchResultID1);
     local hasRemainingRole2 = HasRemainingSlotsForLocalPlayerRole(searchResultID2);
     
-    if (searchResultInfo1.isDelisted == true and searchResultInfo2.isDelisted == false) then
+    if (searchResultInfo1.isDelisted and not searchResultInfo2.isDelisted) then
         return false;
-    elseif (searchResultInfo1.isDelisted == false and searchResultInfo2.isDelisted == true) then
+    elseif (not searchResultInfo1.isDelisted and searchResultInfo2.isDelisted) then
         return true;
     end
 
@@ -81,15 +81,16 @@ function ImprovedLFGSearchPanel_Options:OnEvent(event, arg1)
     end
 end
 
+-- Check Boxes in Search Options Frame Click Pre-Hooks
 local OldEnhancedSearchClickEvent = ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:GetScript("OnClick");
-local OldLiveSortingClickEvent = ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:GetScript("OnClick");
 ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:SetScript("OnClick", function(self) 
     LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
     LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
     ImprovedLFGSearch_UseEnhancedSearch = self:GetChecked();
     OldEnhancedSearchClickEvent(self);
-end)
+end);
 
+local OldLiveSortingClickEvent = ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:GetScript("OnClick");
 ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:SetScript("OnClick", function(self) 
     ImprovedLFGSearch_UseLiveSorting = self:GetChecked();
     if (self:GetChecked()) then
@@ -97,11 +98,13 @@ ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:SetScript("OnClick", func
         LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
     end
     OldEnhancedSearchClickEvent(self);
-end)
+end);
 
 ImprovedLFGSearchPanel_Options:SetScript("OnEvent", ImprovedLFGSearchPanel_Options.OnEvent)
 
--- LFGListFrame.SearchPanel Event Hooks
+
+
+-- LFGListFrame.SearchPanel Event Pre-Hooks
 LFGListFrame.SearchPanel:SetScript("OnHide", function(...)
     ImprovedLFGSearchPanel_Options:Hide();
 end);
@@ -123,5 +126,4 @@ LFGListFrame.SearchPanel:SetScript("OnEvent", function(self, event, ...)
     end
     -- Pass through to the old event handler.
     OldLFGListSearchPanel_OnEvent(self, event, ...);
-end
-);
+end);
