@@ -4,5 +4,6 @@
 ## Version: 0.1
 ## SavedVariables: ImprovedLFGSearch_UseEnhancedSearch, ImprovedLFGSeach_UseLiveSorting
 
+Templates.xml
 ImprovedLFGSearch.xml
 ImprovedLFGSearch.lua
