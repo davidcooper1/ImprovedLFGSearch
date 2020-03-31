@@ -95,22 +95,17 @@ local function UpdateSorting()
     LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
 end
 
--- Check Boxes in Search Options Frame Click Pre-Hooks
-local OldEnhancedSearchClickEvent = ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:GetScript("OnClick");
-ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:SetScript("OnClick", function(self) 
+function ImprovedLFGSearchPanel_Options.EnhancedSearch:OnClick(self)
     UpdateSorting();
     ImprovedLFGSearch_UseEnhancedSearch = self:GetChecked();
-    OldEnhancedSearchClickEvent(self);
-end);
+end
 
-local OldLiveSortingClickEvent = ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:GetScript("OnClick");
-ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:SetScript("OnClick", function(self) 
+function ImprovedLFGSearchPanel_Options.LiveSorting:OnClick(self)
     ImprovedLFGSearch_UseLiveSorting = self:GetChecked();
     if (self:GetChecked()) then
         UpdateSorting();
     end
-    OldEnhancedSearchClickEvent(self);
-end);
+end
 
 ImprovedLFGSearchPanel_Options:SetScript("OnEvent", ImprovedLFGSearchPanel_Options.OnEvent)
 

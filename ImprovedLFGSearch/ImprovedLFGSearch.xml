@@ -29,7 +29,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="EnhancedSearch" inherits="LFGListOptionCheckButtonTemplate">
+            <Frame parentKey="EnhancedSearch" inherits="ImprovedLFGSearch_CheckButtonTemplate">
                 <KeyValues>
                     <KeyValue key="label" value="Enhanced Search" type="string"/>
                     <KeyValue key="tooltip" value="Filter delisted options to the bottom." type="string"/>
@@ -39,7 +39,7 @@
                     <Anchor point="TOP" relativeKey="$parent.Title" y="-20"></Anchor>
                 </Anchors>
             </Frame>
-            <Frame parentKey="LiveSorting" inherits="LFGListOptionCheckButtonTemplate">
+            <Frame parentKey="LiveSorting" inherits="ImprovedLFGSearch_CheckButtonTemplate">
                 <KeyValues>
                     <KeyValue key="label" value="Live Sorting" type="string"/>
                     <KeyValue key="tooltip" value="Sorts results when listings are updated." type="string"/>

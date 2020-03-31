@@ -1,0 +1,87 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\UI.xsd">
+	<Frame name="ImprovedLFGSearch_CheckButtonTemplate" virtual="true">
+	    <!--KeyValues>
+		    Required
+			<KeyValue key="label" value="LABEL_TEXT" type="global"/>
+			Optional
+			<KeyValue key="tooltip" value="LABEL_TEXT" type="global"/>
+		</KeyValues-->
+		<Size x="296" y="22"/>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Label" inherits="GameFontHighlightSmall" justifyH="LEFT">
+					<Size x="150" y="14"/>
+					<Anchors>
+						<Anchor point="LEFT" x="24"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton parentKey="CheckButton">
+				<Size x="22" y="22"/>
+				<HitRectInsets>
+					<AbsInset left="0" right="-130" top="0" bottom="0"/>
+				</HitRectInsets>
+				<Anchors>
+					<Anchor point="LEFT" x="0" y="0"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if ( self:GetChecked() ) then
+							PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+						else
+							PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF);
+						end
+                        self:GetParent():OnClick(self);
+					</OnClick>
+					<OnEnter>
+						local tooltip = self:GetParent().tooltip;
+						if ( tooltip ) then
+							GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+							GameTooltip:SetText(tooltip, nil, nil, nil, nil, true);
+							GameTooltip:Show();
+						end
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide"/>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+				<PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+				<HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+				<CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+				<DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Label:SetText(self.label);
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	<Frame name="ImprovedLFGSearch_MythicNumberInputTemplate" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Label" inherits="GameFontHighlightSmall" justifyH="LEFT">
+					<Size x="150" y="14"/>
+					<Anchors>
+						<Anchor point="LEFT" x="31"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<EditBox parentKey="Value" letters="2" autoFocus="false" inherits="InputBoxTemplate">
+				<Size x="20" y="26"/>
+				<Anchors>
+					<Anchor point="LEFT" x="5" y="0"></Anchor>
+				</Anchors>
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Label:SetText(self.label);
+			</OnLoad>
+		</Scripts>
+	</Frame>
+</Ui>
