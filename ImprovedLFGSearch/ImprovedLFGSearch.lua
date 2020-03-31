@@ -90,11 +90,15 @@ function ImprovedLFGSearchPanel_Options:OnEvent(event, arg1)
     end
 end
 
+local function UpdateSorting() 
+    LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
+    LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+end
+
 -- Check Boxes in Search Options Frame Click Pre-Hooks
 local OldEnhancedSearchClickEvent = ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:GetScript("OnClick");
 ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:SetScript("OnClick", function(self) 
-    LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
-    LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+    UpdateSorting();
     ImprovedLFGSearch_UseEnhancedSearch = self:GetChecked();
     OldEnhancedSearchClickEvent(self);
 end);
@@ -103,15 +107,12 @@ local OldLiveSortingClickEvent = ImprovedLFGSearchPanel_Options.LiveSorting.Chec
 ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:SetScript("OnClick", function(self) 
     ImprovedLFGSearch_UseLiveSorting = self:GetChecked();
     if (self:GetChecked()) then
-        LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
-        LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+        UpdateSorting();
     end
     OldEnhancedSearchClickEvent(self);
 end);
 
 ImprovedLFGSearchPanel_Options:SetScript("OnEvent", ImprovedLFGSearchPanel_Options.OnEvent)
-
-
 
 -- LFGListFrame.SearchPanel Event Pre-Hooks
 LFGListFrame.SearchPanel:SetScript("OnHide", function(...)
@@ -121,6 +122,9 @@ end);
 local OldLFGListSearchPanel_OnShow = LFGListFrame.SearchPanel:GetScript("OnShow");
 LFGListFrame.SearchPanel:SetScript("OnShow", function(...)
     ImprovedLFGSearchPanel_Options:Show();
+    if (#LFGListFrame.SearchPanel.results and ImprovedLFGSearch_UseLiveSorting) then
+        UpdateSorting(); 
+    end
     OldLFGListSearchPanel_OnShow(...);
 end);
 
@@ -128,9 +132,8 @@ local OldLFGListSearchPanel_OnEvent = LFGListFrame.SearchPanel:GetScript("OnEven
 LFGListFrame.SearchPanel:SetScript("OnEvent", function(self, event, ...) 
     if (event == "LFG_LIST_SEARCH_RESULTS_RECEIVED") then
         SetInputStates(true);
-    elseif (event == "LFG_LIST_SEARCH_RESULT_UPDATED" and ImprovedLFGSearch_UseLiveSorting) then
-        LFGListSearchPanel_UpdateResultList(self);
-        LFGListSearchPanel_UpdateResults(self);
+    elseif (event == "LFG_LIST_SEARCH_RESULT_UPDATED" and ImprovedLFGSearch_UseLiveSorting and ImprovedLFGSearchPanel_Options:IsShown()) then
+        UpdateSorting();
     elseif (event == "LFG_LIST_SEARCH_FAILED") then
         SetInputStates(true);
     end
