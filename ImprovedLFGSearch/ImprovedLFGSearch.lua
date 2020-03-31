@@ -90,6 +90,11 @@ function ImprovedLFGSearchPanel_Options:OnEvent(event, arg1)
     end
 end
 
+local function UpdateSorting() 
+    LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
+    LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+end
+
 function ImprovedLFGSearchPanel_Options.EnhancedSearch:OnClick(self)
     LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
     LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
@@ -99,14 +104,11 @@ end
 function ImprovedLFGSearchPanel_Options.LiveSorting:OnClick(self)
     ImprovedLFGSearch_UseLiveSorting = self:GetChecked();
     if (self:GetChecked()) then
-        LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
-        LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+        UpdateSorting();
     end
 end
 
 ImprovedLFGSearchPanel_Options:SetScript("OnEvent", ImprovedLFGSearchPanel_Options.OnEvent)
-
-
 
 -- LFGListFrame.SearchPanel Event Pre-Hooks
 LFGListFrame.SearchPanel:SetScript("OnHide", function(...)
@@ -116,6 +118,9 @@ end);
 local OldLFGListSearchPanel_OnShow = LFGListFrame.SearchPanel:GetScript("OnShow");
 LFGListFrame.SearchPanel:SetScript("OnShow", function(...)
     ImprovedLFGSearchPanel_Options:Show();
+    if (#LFGListFrame.SearchPanel.results and ImprovedLFGSearch_UseLiveSorting) then
+        UpdateSorting(); 
+    end
     OldLFGListSearchPanel_OnShow(...);
 end);
 
@@ -123,9 +128,8 @@ local OldLFGListSearchPanel_OnEvent = LFGListFrame.SearchPanel:GetScript("OnEven
 LFGListFrame.SearchPanel:SetScript("OnEvent", function(self, event, ...) 
     if (event == "LFG_LIST_SEARCH_RESULTS_RECEIVED") then
         SetInputStates(true);
-    elseif (event == "LFG_LIST_SEARCH_RESULT_UPDATED" and ImprovedLFGSearch_UseLiveSorting) then
-        LFGListSearchPanel_UpdateResultList(self);
-        LFGListSearchPanel_UpdateResults(self);
+    elseif (event == "LFG_LIST_SEARCH_RESULT_UPDATED" and ImprovedLFGSearch_UseLiveSorting and ImprovedLFGSearchPanel_Options:IsShown()) then
+        UpdateSorting();
     elseif (event == "LFG_LIST_SEARCH_FAILED") then
         SetInputStates(true);
     end
