@@ -96,8 +96,7 @@ local function UpdateSorting()
 end
 
 function ImprovedLFGSearchPanel_Options.EnhancedSearch:OnClick(self)
-    LFGListSearchPanel_UpdateResultList(LFGListFrame.SearchPanel);
-    LFGListSearchPanel_UpdateResults(LFGListFrame.SearchPanel);
+    UpdateSorting();
     ImprovedLFGSearch_UseEnhancedSearch = self:GetChecked();
 end
 
