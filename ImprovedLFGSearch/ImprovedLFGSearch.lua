@@ -2,16 +2,31 @@ _G["IMPROVEDLFGSEARCH_ENHANCEDSEARCH_LABEL"] = "Enhanced Search";
 
 local OldLFGListSearchPanel_DoSearch = LFGListSearchPanel_DoSearch;
 
+local playerRoleKey = nil;
+
 local roleRemainingKeyLookup = {
 	["TANK"] = "TANK_REMAINING",
 	["HEALER"] = "HEALER_REMAINING",
 	["DAMAGER"] = "DAMAGER_REMAINING",
 };
 
+local function SetInputStates(state)
+    if (state) then
+        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Enable();
+        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Enable();
+    else
+        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Disable();
+        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Disable();
+    end
+end
+
+local function GetPlayerRoleKey()
+    return roleRemainingKeyLookup[GetSpecializationRole(GetSpecialization())];
+end
+
 local function HasRemainingSlotsForLocalPlayerRole(lfgSearchResultID)
 	local roles = C_LFGList.GetSearchResultMemberCounts(lfgSearchResultID);
-	local playerRole = GetSpecializationRole(GetSpecialization());
-	return roles[roleRemainingKeyLookup[playerRole]] > 0;
+	return roles[playerRoleKey] > 0;
 end
 
 function NewLFGListUtil_SortSearchResultsCB(searchResultID1, searchResultID2)
@@ -49,17 +64,11 @@ function NewLFGListUtil_SortSearchResultsCB(searchResultID1, searchResultID2)
 	return searchResultID1 < searchResultID2;
 end
 
-local function SetInputStates(state)
-    if (state) then
-        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Enable();
-        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Enable();
-    else
-        ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:Disable();
-        ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:Disable();
-    end
-end
-
 function LFGListUtil_SortSearchResults(results)
+    if (not playerRoleKey) then
+        playerRoleKey = GetPlayerRoleKey();
+    end
+
     if (ImprovedLFGSearch_UseEnhancedSearch) then
         table.sort(results, NewLFGListUtil_SortSearchResultsCB);
     else
@@ -73,7 +82,9 @@ function LFGListSearchPanel_DoSearch(self)
 end
 
 ImprovedLFGSearchPanel_Options:RegisterEvent("ADDON_LOADED");
+ImprovedLFGSearchPanel_Options:RegisterEvent("PLAYER_LOGIN");
 ImprovedLFGSearchPanel_Options:RegisterEvent("PLAYER_LOGOUT");
+ImprovedLFGSearchPanel_Options:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 
 function ImprovedLFGSearchPanel_Options:OnEvent(event, arg1)
     if (event == "ADDON_LOADED" and arg1 == "ImprovedLFGSearch") then
@@ -84,9 +95,17 @@ function ImprovedLFGSearchPanel_Options:OnEvent(event, arg1)
         if (ImprovedLFGSearch_UseLiveSorting == nil) then
             ImprovedLFGSearch_UseLiveSorting = true;
         end
+    elseif (event == "PLAYER_LOGIN") then
+        playerRoleKey = GetPlayerRoleKey();
     elseif (event == "PLAYER_LOGOUT") then
         ImprovedLFGSearch_UseEnhancedSearch = ImprovedLFGSearchPanel_Options.EnhancedSearch.CheckButton:GetChecked();
         ImprovedLFGSearch_UseLiveSorting = ImprovedLFGSearchPanel_Options.LiveSorting.CheckButton:GetChecked();
+    elseif (event == "PLAYER_SPECIALIZATION_CHANGED" and arg1 == "player") then
+        playerRoleKey = GetPlayerRoleKey();
+        local results = LFGListFrame.SearchPanel.results;
+        if (results ~= nil and #results > 0 and LFGListFrame.SearchPanel:IsShown() and ImprovedLFGSearch_UseLiveSorting) then
+            UpdateSorting();
+        end
     end
 end
 
