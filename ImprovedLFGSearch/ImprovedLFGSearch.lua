@@ -71,7 +71,6 @@ function LFGListUtil_SortSearchResults(results)
 
     if (ImprovedLFGSearch_UseEnhancedSearch) then
         table.sort(results, NewLFGListUtil_SortSearchResultsCB);
-        print("sort done");
     else
         table.sort(results, LFGListUtil_SortSearchResultsCB);
     end
