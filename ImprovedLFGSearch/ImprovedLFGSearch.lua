@@ -71,6 +71,7 @@ function LFGListUtil_SortSearchResults(results)
 
     if (ImprovedLFGSearch_UseEnhancedSearch) then
         table.sort(results, NewLFGListUtil_SortSearchResultsCB);
+        print("sort done");
     else
         table.sort(results, LFGListUtil_SortSearchResultsCB);
     end
@@ -115,8 +116,8 @@ local function UpdateSorting()
 end
 
 function ImprovedLFGSearchPanel_Options.EnhancedSearch:OnClick(self)
-    UpdateSorting();
     ImprovedLFGSearch_UseEnhancedSearch = self:GetChecked();
+    UpdateSorting();
 end
 
 function ImprovedLFGSearchPanel_Options.LiveSorting:OnClick(self)
